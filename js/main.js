@@ -8,15 +8,15 @@ Vue.component('add-note', {
             </p>
             <p>
                 <label for="task1">Пункт 1:</label>
-                <input required id="task1" v-model="task1" placeholder="Пункт 1">
+                <input required id="task1" v-model="task1.title" placeholder="Пункт 1">
                 <label for="task2">Пункт 2:</label>
-                <input required id="task2" v-model="task2" placeholder="Пункт 2">
+                <input required id="task2" v-model="task2.title" placeholder="Пункт 2">
                 <label for="task3">Пункт 3:</label>
-                <input required id="task3" v-model="task3" placeholder="Пункт 3">
+                <input required id="task3" v-model="task3.title" placeholder="Пункт 3">
                 <label for="task4">Пункт 4:</label>
-                <input id="task4" v-model="task4" placeholder="Пункт 4">
+                <input id="task4" v-model="task4.title" placeholder="Пункт 4">
                 <label for="task5">Пункт 5:</label>
-                <input id="task5" v-model="task5" placeholder="Пункт 5">
+                <input id="task5" v-model="task5.title" placeholder="Пункт 5">
             </p>
             <input type="submit" value="Добавить">
         </form>
@@ -24,11 +24,26 @@ Vue.component('add-note', {
     data() {
         return {
             name: null,
-            task1: null,
-            task2: null,
-            task3: null,
-            task4: null,
-            task5: null,
+            task1: {
+                title:null,
+                completed: false
+            },
+            task2: {
+                title:null,
+                completed: false
+            },
+            task3: {
+                title:null,
+                completed: false
+            },
+            task4: {
+                title:null,
+                completed: false
+            },
+            task5: {
+                title:null,
+                completed: false
+            },
         }
     },
     methods: {
@@ -42,11 +57,11 @@ Vue.component('add-note', {
             eventBus.$emit('notes', card)
             this.name = null
             this.task = null
-            this.task1 = null
-            this.task2 = null
-            this.task3 = null
-            this.task4 = null
-            this.task5 = null
+            this.task1.title = null
+            this.task2.title = null
+            this.task3.title = null
+            this.task4.title = null
+            this.task5.title = null
             console.log(card)
         }
     },
@@ -57,18 +72,33 @@ Vue.component('add-note', {
     }
 })
 
+Vue.component('tasks', {
+    template: `
+        <div>
+            <ul>
+                <li v-for="ta in card.task">{{ta.title}}</li>
+            </ul>
+        </div>
+    `,
+    data() {
+        return {
+
+        }
+    },
+    props: {
+        card: {
+            type: Object,
+            required: true
+        }
+    }
+})
+
 Vue.component('column', {
     template: `
         <div class="column">
             <div v-for="card in column1">
-                <p>{{card.name}}</p>
-                <ul v-if="card.task[0] != null">
-                    <li >{{card.task[0]}}</li>
-                    <li>{{card.task[1]}}</li>
-                    <li>{{card.task[2]}}</li>
-                    <li v-if="card.task[3] != null">{{card.task[3]}}</li>
-                    <li v-if="card.task[4] != null">{{card.task[4]}}</li>
-                </ul>
+                <h2>{{card.name}}</h2>
+                <tasks :card="card"></tasks>
             </div>
         </div>
     `,
