@@ -1,4 +1,5 @@
 let eventBus = new Vue()
+let eventBus2 = new Vue()
 
 Vue.component('todolist', {
     template: `
@@ -10,7 +11,7 @@ Vue.component('todolist', {
             <div class="columns">
                 <div>
                     <h1>Столбец 1</h1>
-                    <column :column1="column1"></column>
+                    <column1 :column1="column1"></column1>
                 </div>
                 <div>
                     <h1>Столбец 2</h1>
@@ -29,16 +30,21 @@ Vue.component('todolist', {
         }
     },
     mounted() {
-        eventBus.$on('todolist', card => {
+        eventBus.$on('addcolumn1', card => {
             if (this.column1.length < 3){
                 this.column1.push(card)
-                console.log(this.column1)
+            }
+        })
+        eventBus2.$on('addcolumn2', card => {
+            if (this.column2.length < 5){
+                this.column2.push(card)
+                console.log(this.column2)
             }
         })
     },
 })
 
-Vue.component('column', {
+Vue.component('column1', {
     template: `
         <div class="column">
             <div v-for="card in column1">
@@ -48,6 +54,8 @@ Vue.component('column', {
                         v-for="tsk in card.task" 
                         v-if="tsk.title != null"
                         @click="tsk.completed = true"
+                        @click="card.status += 1"
+                        @click.prevent="changeCompleted(card)"
                         :class="{ completedTask: tsk.completed }"
                     >{{tsk.title}}</li>
                 </ul>
@@ -57,7 +65,22 @@ Vue.component('column', {
     props: {
         column1: {
             type: Array,
-        }
+        },
+
+    },
+    methods: {
+        changeCompleted(card) {
+            let allTask = 0
+            for(let i = 0; i < 5; i++){
+                if (card.task[i].title != null) {
+                    allTask++
+                }
+            }
+            if ((card.status / allTask) * 100 >= 50) {
+                eventBus2.$emit('addcolumn2', card)
+            }
+
+        },
     },
 })
 
@@ -107,7 +130,7 @@ Vue.component('add-note', {
                 data: null,
                 status: 0,
             }
-            eventBus.$emit('todolist', card)
+            eventBus.$emit('addcolumn1', card)
             this.name = null
             this.title1 = null
             this.title2 = null
@@ -116,11 +139,6 @@ Vue.component('add-note', {
             this.title5 = null
         }
     },
-    props: {
-        column1: {
-            type: Array
-        },
-    }
 })
 
 let app = new Vue({
