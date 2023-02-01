@@ -78,6 +78,7 @@ Vue.component('column1', {
             }
             if ((card.status / allTask) * 100 >= 50) {
                 eventBus2.$emit('addcolumn2', card)
+                this.column1.slice(this.column1.indexOf(card), 1)
             }
 
         },
