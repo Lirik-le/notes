@@ -32,6 +32,7 @@ Vue.component('todolist', {
         eventBus.$on('todolist', card => {
             if (this.column1.length < 3){
                 this.column1.push(card)
+                console.log(this.column1)
             }
         })
     },
@@ -41,7 +42,15 @@ Vue.component('column', {
     template: `
         <div class="column">
             <div v-for="card in column1">
-                
+                <h2>{{card.name}}</h2>  
+                <ul>
+                    <li
+                        v-for="tsk in card.task" 
+                        v-if="tsk.title != null"
+                        @click="tsk.completed = true"
+                        :class="{ completedTask: tsk.completed }"
+                    >{{tsk.title}}</li>
+                </ul>
             </div>
         </div>
     `,
@@ -50,30 +59,6 @@ Vue.component('column', {
             type: Array,
         }
     },
-    methods: {
-
-    }
-})
-
-Vue.component('card', {
-    template: `
-        <h2>{{card.name}}</h2>
-        <ul>
-            <li
-                :class="{completedTask: tsk.completed}"
-                v-if="tsk.title != null"
-                @click="tsk.completed = true"
-            >{{t.title}}</li>
-            <card :card="card" v-for="tsk in card"></card>
-        </ul>
-        
-    `,
-    props: {
-        tsk: {
-            type: Object,
-            required: true
-        }
-    }
 })
 
 Vue.component('add-note', {
@@ -129,7 +114,6 @@ Vue.component('add-note', {
             this.title3 = null
             this.title4 = null
             this.title5 = null
-            console.log(card)
         }
     },
     props: {
