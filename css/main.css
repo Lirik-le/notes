@@ -6,3 +6,12 @@
     display: flex;
     justify-content: space-around;
 }
+
+li {
+    cursor: pointer;
+}
+
+.completedTask {
+    text-decoration: line-through;
+    cursor: default;
+}
