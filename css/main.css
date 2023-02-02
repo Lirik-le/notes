@@ -7,6 +7,14 @@
     justify-content: space-around;
 }
 
+.columns > div {
+    width: 33%;
+}
+
+.columns > div > h1{
+    text-align: center;
+}
+
 li {
     cursor: pointer;
 }
@@ -14,4 +22,49 @@ li {
 .completedTask {
     text-decoration: line-through;
     cursor: default;
+    pointer-events: none;
+}
+
+.card {
+    background-color: lightgrey;
+    padding: 2px 20px;
+    border-radius: 5px;
+    border: 2px solid black;
+    width: 40%;
+    max-width: 100%;
+    margin: 20px auto;
+}
+
+input {
+    border: 2px solid black;
+    border-radius: 5px;
+    height: 25px;
+    padding-left: 10px;
+    font-size: 16px;
+    margin: 0 10px 0 3px;
+}
+
+.addCardName {
+    margin: 20px 0;
+}
+
+.addCard > div {
+    margin: 20px 0;
+}
+
+.btn {
+    height: 35px;
+    width: 200px;
+}
+
+.btnDisabled {
+    color: lightgrey;
+    height: 35px;
+    width: 200px;
+}
+
+.min {
+    font-size: 11px;
+    color: gray;
+    position: absolute;
 }

@@ -9,15 +9,15 @@ Vue.component('todolist', {
             </div>
             <div class="columns">
                 <div>
-                    <h1>Столбец 1</h1>
-                    <column1 :column1="column1"></column1>
+                    <h1>Новые</h1>
+                    <column1 :column1="column1" :column2="column2"></column1>
                 </div>
                 <div>
-                    <h1>Столбец 2</h1>
+                    <h1>В прогрессе</h1>
                     <column2 :column2="column2"></column2>
                 </div>
                 <div>
-                    <h1>Столбец 3</h1>
+                    <h1>Выполненные</h1>
                     <column3 :column3="column3"></column3>
                 </div>
             </div>
@@ -37,16 +37,10 @@ Vue.component('todolist', {
             }
         })
         eventBus.$on('addColumn2', card => {
-            if (this.column2.length < 5){
-                this.column2.push(card)
-                console.log(this.column2)
-            }
+            this.column2.push(card)
         })
         eventBus.$on('addColumn3', card => {
-            if (this.column3.length < 5){
-                this.column3.push(card)
-                console.log(this.column3)
-            }
+            this.column3.push(card)
         })
     },
 })
@@ -54,7 +48,7 @@ Vue.component('todolist', {
 Vue.component('column1', {
     template: `
         <div class="column">
-            <div v-for="card in column1">
+            <div class="card" v-for="card in column1">
                 <h2>{{card.name}}</h2>  
                 <ul>
                     <li
@@ -73,7 +67,9 @@ Vue.component('column1', {
         column1: {
             type: Array,
         },
-
+        column2: {
+            type: Array,
+        },
     },
     methods: {
         changeCompleted(card) {
@@ -83,7 +79,7 @@ Vue.component('column1', {
                     allTask++
                 }
             }
-            if ((card.status / allTask) * 100 >= 50) {
+            if ((card.status / allTask) * 100 >= 50 && this.column2.length < 5) {
                 eventBus.$emit('addColumn2', card)
                 this.column1.splice(this.column1.indexOf(card), 1)
             }
@@ -95,7 +91,7 @@ Vue.component('column1', {
 Vue.component('column2', {
     template: `
         <div class="column">
-            <div v-for="card in column2">
+            <div class="card" v-for="card in column2">
                 <h2>{{card.name}}</h2>  
                 <ul>
                     <li
@@ -126,6 +122,7 @@ Vue.component('column2', {
             if ((card.status / allTask) * 100 === 100) {
                 eventBus.$emit('addColumn3', card)
                 this.column2.splice(this.column2.indexOf(card), 1)
+                card.date = new Date().toLocaleString();
             }
 
         }
@@ -135,7 +132,7 @@ Vue.component('column2', {
 Vue.component('column3', {
     template: `
         <div class="column">
-            <div v-for="card in column3">
+            <div class="card" v-for="card in column3">
                 <h2>{{card.name}}</h2>  
                 <ul>
                     <li
@@ -146,6 +143,7 @@ Vue.component('column3', {
                         @click.prevent="changeCompleted(card)"
                         :class="{ completedTask: tsk.completed }"
                     >{{tsk.title}}</li>
+                    <p>{{ card.date }}</p>
                 </ul>
             </div>
         </div>
@@ -160,23 +158,27 @@ Vue.component('column3', {
 Vue.component('add-note', {
     template: `
         <form @submit.prevent="sendCard">
-            <p>
+            <div class="addCardName">
                 <label for="record">Название:</label>
                 <input required id="record" v-model="name" placeholder="Заметка">
-            </p>
-            <p>
-                <label for="task1">Пункт 1:</label>
-                <input required id="task1" v-model="title1" placeholder="Пункт 1">
-                <label for="task2">Пункт 2:</label>
-                <input required id="task2" v-model="title2" placeholder="Пункт 2">
-                <label  for="task3">Пункт 3:</label>
-                <input required id="task3" v-model="title3" placeholder="Пункт 3">
-                <label for="task4">Пункт 4:</label>
-                <input id="task4" v-model="title4" placeholder="Пункт 4">
-                <label for="task5">Пункт 5:</label>
-                <input id="task5" v-model="title5" placeholder="Пункт 5">
-            </p>
-            <input type="submit" value="Добавить">
+            </div>
+            <div class="addCard">
+                <div>
+                    <label for="task1">Пункт 1:</label>
+                    <input required id="task1" v-model="title1" placeholder="Пункт 1">
+                    <label for="task2">Пункт 2:</label>
+                    <input required id="task2" v-model="title2" placeholder="Пункт 2">
+                    <label  for="task3">Пункт 3:</label>
+                    <input required id="task3" v-model="title3" placeholder="Пункт 3">
+                </div>
+                <div>
+                    <label for="task4">Пункт 4:</label>
+                    <input id="task4" v-model="title4" placeholder="Пункт 4">
+                    <label for="task5">Пункт 5:</label>
+                    <input id="task5" v-model="title5" placeholder="Пункт 5">
+                </div>
+            </div>
+            <input class="btn" type="submit" value="Добавить"> <span class="min">*от 3 пунтков</span>
         </form>
     `,
     data() {
@@ -200,7 +202,7 @@ Vue.component('add-note', {
                     {title: this.title4, completed: false},
                     {title: this.title5, completed: false},
                 ],
-                data: null,
+                date: null,
                 status: 0,
             }
             eventBus.$emit('addColumn1', card)
