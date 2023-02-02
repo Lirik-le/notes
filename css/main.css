@@ -1,17 +1,29 @@
-.header {
+* {
+    font-family: "Droid Sans", sans-serif;
+}
+
+.todolist {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.formCard {
     text-align: center;
+    width: 25%;
 }
 
 .columns {
     display: flex;
     justify-content: space-around;
+    width: 70%;
 }
 
 .columns > div {
     width: 33%;
 }
 
-.columns > div > h1{
+.columns > div > h2{
     text-align: center;
 }
 
@@ -30,7 +42,7 @@ li {
     padding: 2px 20px;
     border-radius: 5px;
     border: 2px solid black;
-    width: 40%;
+    width: 60%;
     max-width: 100%;
     margin: 20px auto;
 }
@@ -45,20 +57,14 @@ input {
 }
 
 .addCardName {
-    margin: 20px 0;
+    margin: 20px 0 40px 0;
 }
 
-.addCard > div {
-    margin: 20px 0;
+.addCard > p {
+    margin: 25px 0;
 }
 
 .btn {
-    height: 35px;
-    width: 200px;
-}
-
-.btnDisabled {
-    color: lightgrey;
     height: 35px;
     width: 200px;
 }

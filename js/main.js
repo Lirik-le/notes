@@ -3,21 +3,21 @@ let eventBus = new Vue()
 Vue.component('todolist', {
     template: `
         <div class="todolist">
-            <div class="header">
+            <div class="formCard">
                 <h1>Заметки</h1>
                 <add-note></add-note>
             </div>
             <div class="columns">
                 <div>
-                    <h1>Новые</h1>
+                    <h2>Новые</h2>
                     <column1 :column1="column1" :column2="column2"></column1>
                 </div>
                 <div>
-                    <h1>В прогрессе</h1>
+                    <h2>В прогрессе</h2>
                     <column2 :column2="column2"></column2>
                 </div>
                 <div>
-                    <h1>Выполненные</h1>
+                    <h2>Выполненные</h2>
                     <column3 :column3="column3"></column3>
                 </div>
             </div>
@@ -73,7 +73,6 @@ Vue.component('column1', {
                 eventBus.$emit('addColumn2', card)
                 this.column1.splice(this.column1.indexOf(card), 1)
             }
-
         },
     },
 })
@@ -104,7 +103,6 @@ Vue.component('column2', {
                 this.column2.splice(this.column2.indexOf(card), 1)
                 card.date = new Date().toLocaleString();
             }
-
         }
     }
 })
@@ -132,9 +130,7 @@ Vue.component('note', {
                 <li
                     v-for="tsk in card.task" 
                     v-if="tsk.title != null"
-                    @click="tsk.completed = true"
-                    @click="card.status += 1"
-                    @click.prevent="changeCompleted(card)"
+                    @click="tsk.completed = true, card.status += 1, changeCompleted(card)"
                     :class="{ completedTask: tsk.completed }"
                 >{{tsk.title}}</li>
                 <p>{{ card.date }}</p>
@@ -155,26 +151,22 @@ Vue.component('add-note', {
     template: `
         <form @submit.prevent="sendCard">
             <div class="addCardName">
-                <label for="record">Название:</label>
+                <label for="record">Название*:</label>
                 <input required id="record" v-model="name" placeholder="Заметка">
             </div>
             <div class="addCard">
-                <div>
-                    <label for="task1">Пункт 1:</label>
-                    <input required id="task1" v-model="title1" placeholder="Пункт 1">
-                    <label for="task2">Пункт 2:</label>
-                    <input required id="task2" v-model="title2" placeholder="Пункт 2">
-                    <label  for="task3">Пункт 3:</label>
-                    <input required id="task3" v-model="title3" placeholder="Пункт 3">
-                </div>
-                <div>
-                    <label for="task4">Пункт 4:</label>
-                    <input id="task4" v-model="title4" placeholder="Пункт 4">
-                    <label for="task5">Пункт 5:</label>
-                    <input id="task5" v-model="title5" placeholder="Пункт 5">
-                </div>
+                <p><label for="task1">Пункт 1*:</label>
+                    <input required id="task1" v-model="title1" placeholder="Пункт 1"></p>
+                <p><label for="task2">Пункт 2*:</label>
+                    <input required id="task2" v-model="title2" placeholder="Пункт 2"></p>
+                <p><label  for="task3">Пункт 3*:</label>
+                    <input required id="task3" v-model="title3" placeholder="Пункт 3"></p>
+                <p><label for="task4">Пункт 4:</label>
+                    <input id="task4" v-model="title4" placeholder="Пункт 4"></p>
+                <p><label for="task5">Пункт 5:</label>
+                    <input id="task5" v-model="title5" placeholder="Пункт 5"></p>
             </div>
-            <input class="btn" type="submit" value="Добавить"> <span class="min">*от 3 пунтков</span>
+            <input class="btn" type="submit" value="Добавить"> <span class="min">*от 3 пунктов<br>минимум</span>
         </form>
     `,
     data() {
