@@ -5,7 +5,10 @@ Vue.component('todolist', {
         <div class="todolist">
             <div class="formCard">
                 <h1>Заметки</h1>
-                <add-note></add-note>
+                <div v-show="addCard" class="modalBackgrVis">
+                    <add-note class="modalWindow" :changeModal="changeModal"></add-note>
+                </div>
+                <input class="btn" type="button" value="Добавить заметку" @click="changeModal">
             </div>
             <div class="columns">
                 <div>
@@ -28,6 +31,7 @@ Vue.component('todolist', {
             column1: [],
             column2: [],
             column3: [],
+            addCard: false
         }
     },
     mounted() {
@@ -43,6 +47,12 @@ Vue.component('todolist', {
             this.column3.push(card)
         })
     },
+    methods: {
+        changeModal() {
+            this.addCard = !this.addCard
+            console.log(this.addCard)
+        }
+    }
 })
 
 Vue.component('column1', {
@@ -143,13 +153,14 @@ Vue.component('note', {
         },
         changeCompleted: {
             type: Function
-        }
+        },
     }
 })
 
 Vue.component('add-note', {
     template: `
         <form @submit.prevent="sendCard">
+            <h1 class="cross" @click="changeModal">+</h1>
             <div class="addCardName">
                 <label for="record">Название*:</label>
                 <input required id="record" v-model="name" placeholder="Заметка">
@@ -166,9 +177,14 @@ Vue.component('add-note', {
                 <p><label for="task5">Пункт 5:</label>
                     <input id="task5" v-model="title5" placeholder="Пункт 5"></p>
             </div>
-            <input class="btn" type="submit" value="Добавить"> <span class="min">*от 3 пунктов<br>минимум</span>
+            <input @click="changeModal" class="btn" type="submit" value="Добавить"> <span class="min">*от 3 пунктов<br>минимум</span>
         </form>
     `,
+    props: {
+        changeModal: {
+            type: Function
+        }
+    },
     data() {
         return {
             name: null,
