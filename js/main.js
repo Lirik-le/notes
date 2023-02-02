@@ -49,17 +49,7 @@ Vue.component('column1', {
     template: `
         <div class="column">
             <div class="card" v-for="card in column1">
-                <h2>{{card.name}}</h2>  
-                <ul>
-                    <li
-                        v-for="tsk in card.task" 
-                        v-if="tsk.title != null"
-                        @click="tsk.completed = true"
-                        @click="card.status += 1"
-                        @click.prevent="changeCompleted(card)"
-                        :class="{ completedTask: tsk.completed }"
-                    >{{tsk.title}}</li>
-                </ul>
+                <note :card="card" :changeCompleted="changeCompleted"></note>
             </div>
         </div>
     `,
@@ -92,17 +82,7 @@ Vue.component('column2', {
     template: `
         <div class="column">
             <div class="card" v-for="card in column2">
-                <h2>{{card.name}}</h2>  
-                <ul>
-                    <li
-                        v-for="tsk in card.task" 
-                        v-if="tsk.title != null"
-                        @click="tsk.completed = true"
-                        @click="card.status += 1"
-                        @click.prevent="changeCompleted(card)"
-                        :class="{ completedTask: tsk.completed }"
-                    >{{tsk.title}}</li>
-                </ul>
+                <note :card="card" :changeCompleted="changeCompleted"></note>
             </div>
         </div>
     `,
@@ -133,24 +113,40 @@ Vue.component('column3', {
     template: `
         <div class="column">
             <div class="card" v-for="card in column3">
-                <h2>{{card.name}}</h2>  
-                <ul>
-                    <li
-                        v-for="tsk in card.task" 
-                        v-if="tsk.title != null"
-                        @click="tsk.completed = true"
-                        @click="card.status += 1"
-                        @click.prevent="changeCompleted(card)"
-                        :class="{ completedTask: tsk.completed }"
-                    >{{tsk.title}}</li>
-                    <p>{{ card.date }}</p>
-                </ul>
+                <note :card="card"></note>
             </div>
         </div>
     `,
     props: {
         column3: {
             type: Array
+        }
+    }
+})
+
+Vue.component('note', {
+    template: `
+        <div>
+            <h2>{{card.name}}</h2>  
+            <ul>
+                <li
+                    v-for="tsk in card.task" 
+                    v-if="tsk.title != null"
+                    @click="tsk.completed = true"
+                    @click="card.status += 1"
+                    @click.prevent="changeCompleted(card)"
+                    :class="{ completedTask: tsk.completed }"
+                >{{tsk.title}}</li>
+                <p>{{ card.date }}</p>
+            </ul>
+        </div>
+    `,
+    props: {
+        card: {
+            type: Object
+        },
+        changeCompleted: {
+            type: Function
         }
     }
 })
